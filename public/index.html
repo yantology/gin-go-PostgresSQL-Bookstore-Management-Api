@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookstore Management</title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Bookstore Management</h1>
+
+      <!-- Form for Get All Books -->
+      <div class="form-group">
+        <button onclick="getAllBooks()">Get All Books</button>
+      </div>
+
+      <!-- Form for Get Book By ID -->
+      <div class="form-group">
+        <label for="getBookID">Book ID</label>
+        <input type="text" id="getBookID" placeholder="Enter Book ID" />
+        <button onclick="getBookByID()">Get Book By ID</button>
+      </div>
+
+      <!-- Form for Create Book -->
+      <div class="form-group">
+        <label for="createBookName">Book Name</label>
+        <input type="text" id="createBookName" placeholder="Enter Book Name" />
+        <label for="createBookAuthor">Author</label>
+        <input
+          type="text"
+          id="createBookAuthor"
+          placeholder="Enter Author Name"
+        />
+        <label for="createBookPublication">Publication</label>
+        <input
+          type="text"
+          id="createBookPublication"
+          placeholder="Enter Publication"
+        />
+        <button onclick="createBook()">Create Book</button>
+      </div>
+
+      <!-- Form for Update Book By ID -->
+      <div class="form-group">
+        <label for="updateBookID">Book ID</label>
+        <input type="text" id="updateBookID" placeholder="Enter Book ID" />
+        <label for="updateBookName">Book Name</label>
+        <input
+          type="text"
+          id="updateBookName"
+          placeholder="Enter Updated Book Name"
+        />
+        <label for="updateBookAuthor">Author</label>
+        <input
+          type="text"
+          id="updateBookAuthor"
+          placeholder="Enter Updated Author Name"
+        />
+        <label for="updateBookPublication">Publication</label>
+        <input
+          type="text"
+          id="updateBookPublication"
+          placeholder="Enter Updated Publication"
+        />
+        <button onclick="updateBookByID()">Update Book By ID</button>
+      </div>
+
+      <!-- Form for Delete Book By ID -->
+      <div class="form-group">
+        <label for="deleteBookID">Book ID</label>
+        <input type="text" id="deleteBookID" placeholder="Enter Book ID" />
+        <button onclick="deleteBookByID()">Delete Book By ID</button>
+      </div>
+
+      <div class="result" id="result"></div>
+    </div>
+
+    <script>
+      const apiUrl = "/books";
+
+      async function getAllBooks() {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        document.getElementById("result").innerText = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+
+      async function getBookByID() {
+        const bookID = document.getElementById("getBookID").value;
+        const response = await fetch(`${apiUrl}/${bookID}`);
+        const data = await response.json();
+        document.getElementById("result").innerText = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+
+      async function createBook() {
+        const bookData = {
+          name: document.getElementById("createBookName").value,
+          author: document.getElementById("createBookAuthor").value,
+          publication: document.getElementById("createBookPublication").value,
+        };
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookData),
+        });
+        const data = await response.json();
+        document.getElementById("result").innerText = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+
+      async function updateBookByID() {
+        const bookID = document.getElementById("updateBookID").value;
+        const bookData = {
+          name: document.getElementById("updateBookName").value,
+          author: document.getElementById("updateBookAuthor").value,
+          publication: document.getElementById("updateBookPublication").value,
+        };
+        const response = await fetch(`${apiUrl}/${bookID}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookData),
+        });
+        const data = await response.json();
+        document.getElementById("result").innerText = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+
+      async function deleteBookByID() {
+        const bookID = document.getElementById("deleteBookID").value;
+        const response = await fetch(`${apiUrl}/${bookID}`, {
+          method: "DELETE",
+        });
+        const data = await response.json();
+        document.getElementById("result").innerText = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+    </script>
+  </body>
+</html>

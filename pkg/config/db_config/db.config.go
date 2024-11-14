@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql" // MySQL driver
+	_ "github.com/lib/pq"
 )
 
 var DB_HOST = "127.0.0.1"
@@ -47,18 +50,20 @@ var DB *sql.DB
 
 func ConnectDatabase(openFunc OpenFunc) {
 	var errConnection error
+
 	if DB_DRIVER == "mysql" {
 		dsnMysql := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
 		DB, errConnection = openFunc(DB_DRIVER, dsnMysql)
 	} else if DB_DRIVER == "postgres" {
-		dsnPgSql := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable&TimeZone=Asia/Jakarta", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+		fmt.Printf("postgres://%s:%s@%s:%s/%s?sslmode=disable&TimeZone=Asia/Jakarta", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+		dsnPgSql := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&TimeZone=Asia/Jakarta", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
 		DB, errConnection = openFunc(DB_DRIVER, dsnPgSql)
 	} else {
 		panic("Invalid database driver")
 	}
 
 	if errConnection != nil {
-		panic("Failed to connect to database")
+		panic(fmt.Sprintf("Failed to connect to database: %v", errConnection))
 	} else {
 		fmt.Println("Database connected")
 	}

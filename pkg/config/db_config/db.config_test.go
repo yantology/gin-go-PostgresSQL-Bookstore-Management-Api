@@ -77,7 +77,7 @@ func TestConnectDatabase(t *testing.T) {
 		{
 			name:        "Postgres connection",
 			driver:      "postgres",
-			expectedDSN: "postgresql://test_user:test_password@test_host:test_port/test_name?sslmode=disable&TimeZone=Asia/Jakarta",
+			expectedDSN: "postgres://test_user:test_password@test_host:test_port/test_name?sslmode=disable&TimeZone=Asia/Jakarta",
 			expectedErr: false,
 			assertExp:   true,
 		},
@@ -91,7 +91,7 @@ func TestConnectDatabase(t *testing.T) {
 		{
 			name:        "Postgres Failed connection",
 			driver:      "postgres",
-			expectedDSN: "postgresql://test_user:test_password@test_host:test_port/test_name?sslmode=disable&TimeZone=Asia/Jakarta",
+			expectedDSN: "postgres://test_user:test_password@test_host:test_port/test_name?sslmode=disable&TimeZone=Asia/Jakarta",
 			expectedErr: true,
 			assertExp:   true,
 		},
